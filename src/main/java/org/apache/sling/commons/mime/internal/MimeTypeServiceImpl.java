@@ -23,9 +23,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +34,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -90,8 +87,6 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
     private MimeTypeProvider[] typeProviders;
 
     private List<MimeTypeProvider> typeProviderList = new ArrayList<>();
-
-    private ServiceRegistration webConsolePluginService;
 
     // --------- MimeTypeService interface
 
@@ -222,31 +217,11 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 registerMimeType(configType);
             }
         }
-
-        try {
-            MimeTypeWebConsolePlugin plugin = new MimeTypeWebConsolePlugin(this);
-
-            Dictionary<String, String> props = new Hashtable<>();
-            props.put("felix.webconsole.label", MimeTypeWebConsolePlugin.LABEL);
-            props.put("felix.webconsole.title", MimeTypeWebConsolePlugin.TITLE);
-            props.put("felix.webconsole.category", "Sling");
-            props.put("felix.webconsole.css", MimeTypeWebConsolePlugin.CSS_REFS);
-
-            webConsolePluginService = context.registerService(
-                "javax.servlet.Servlet", plugin, props);
-        } catch (Throwable t) {
-            // don't care, we thus don't have the console plugin
-        }
     }
 
     @Deactivate
     protected void deactivate(final BundleContext context) {
         context.removeBundleListener(this);
-
-        if (webConsolePluginService != null) {
-            webConsolePluginService.unregister();
-            webConsolePluginService = null;
-        }
     }
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)

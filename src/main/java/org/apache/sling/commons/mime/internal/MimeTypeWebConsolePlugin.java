@@ -27,10 +27,23 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+@Component(
+        service = Servlet.class,
+        property = {
+                "felix.webconsole.label=" + MimeTypeWebConsolePlugin.LABEL,
+                "felix.webconsole.title=" + MimeTypeWebConsolePlugin.TITLE,
+                "felix.webconsole.category=Sling",
+                "felix.webconsole.css=" + MimeTypeWebConsolePlugin.CSS_REFS
+        }
+        )
 class MimeTypeWebConsolePlugin extends HttpServlet {
 
     /** Serial Version */
@@ -44,11 +57,8 @@ class MimeTypeWebConsolePlugin extends HttpServlet {
 
     static final String CSS_REFS = RES_LOC + "/jquery.treeTable.css";
 
-    private final MimeTypeServiceImpl mimeTypeService;
-
-    MimeTypeWebConsolePlugin(MimeTypeServiceImpl mimeTypeService) {
-        this.mimeTypeService = mimeTypeService;
-    }
+    @Reference
+    private MimeTypeServiceImpl mimeTypeService;
 
     @Override
     protected void doGet(HttpServletRequest request,
