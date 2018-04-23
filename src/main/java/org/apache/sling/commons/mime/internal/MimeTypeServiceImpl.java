@@ -20,7 +20,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -43,10 +42,11 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
-import org.osgi.service.log.LogService;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <code>MimeTypeServiceImpl</code> is the official implementation of the
@@ -63,7 +63,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
     public static final String CORE_MIME_TYPES = "/META-INF/core_mime.types";
 
     public static final String MIME_TYPES = "/META-INF/mime.types";
-
+    
     @ObjectClassDefinition(name = "Apache Sling MIME Type Service",
             description = "The Sling MIME Type Service provides support for " +
                 "maintaining and configuring MIME Type mappings.")
@@ -80,9 +80,8 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         String[] mime_types();
     }
 
-    @Reference(cardinality=ReferenceCardinality.OPTIONAL, policy=ReferencePolicy.DYNAMIC)
-    private volatile LogService logService;
-
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+    
     private Map<String, String> mimeTab = new HashMap<>();
 
     private Map<String, String> extensionMap = new HashMap<>();
@@ -152,8 +151,8 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 String oldMimeType = mimeTab.get(extension);
                 if (oldMimeType == null) {
 
-                    log(LogService.LOG_DEBUG, "registerMimeType: Add mapping "
-                        + extension + "=" + mimeType, null);
+                    log.debug("registerMimeType: Add mapping "
+                        + extension + "=" + mimeType);
 
                     this.mimeTab.put(extension, mimeType);
 
@@ -163,10 +162,10 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
                 } else {
 
-                    log(LogService.LOG_INFO,
+                    log.info(
                         "registerMimeType: Ignoring mapping " + extension + "="
                             + mimeType + ": Mapping " + extension + "="
-                            + oldMimeType + " already exists", null);
+                            + oldMimeType + " already exists");
 
                 }
 
@@ -272,7 +271,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             try {
                 this.registerMimeType(event.getBundle().getEntry(MIME_TYPES));
             } catch (IllegalStateException ie) {
-                log(LogService.LOG_INFO, "bundleChanged: an issue while registering the mime type occurred", null);
+                log.info("bundleChanged: an issue while registering the mime type occurred");
             }
         }
     }
@@ -310,7 +309,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 this.registerMimeType(ins);
             } catch (IOException ioe) {
                 // log but don't actually care
-                this.log(LogService.LOG_WARNING, "An error occurred reading "
+                log.warn("An error occurred reading "
                     + mimetypes, ioe);
             } finally {
                 if (ins != null) {
@@ -337,21 +336,6 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             String[] extensions = new String[parts.length - 1];
             System.arraycopy(parts, 1, extensions, 0, extensions.length);
             this.registerMimeType(parts[0], extensions);
-        }
-    }
-
-    private void log(int level, String message, Throwable t) {
-        LogService log = this.logService;
-        if (log != null) {
-            log.log(level, message, t);
-        } else {
-            PrintStream out = (level == LogService.LOG_ERROR)
-                    ? System.err
-                    : System.out;
-            out.println(message);
-            if (t != null) {
-                t.printStackTrace(out);
-            }
         }
     }
 
