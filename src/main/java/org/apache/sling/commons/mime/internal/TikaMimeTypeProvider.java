@@ -21,10 +21,18 @@ import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
+import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * MIME type provider based on Apache Tika.
  */
+@Component(
+        property = { //
+                Constants.SERVICE_DESCRIPTION + "=" + "Apache Tika MIME Type Provider",
+                Constants.SERVICE_VENDOR + "=" + "The Apache Software Foundation"
+        }
+        )
 public class TikaMimeTypeProvider implements MimeTypeProvider {
 
     private final Tika tika = new Tika();
