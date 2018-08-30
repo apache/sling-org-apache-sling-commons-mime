@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 @Component(service = MimeTypeService.class,
     property = {
             Constants.SERVICE_VENDOR + "=The Apache Software Foundation",
-            Constants.SERVICE_DESCRIPTION + "=Apache Sling MIME Type Service"
+            Constants.SERVICE_DESCRIPTION + "=Apache Sling Commons MIME Type Service"
     })
 @Designate(ocd = MimeTypeServiceImpl.Config.class)
 public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
@@ -61,8 +61,8 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     public static final String MIME_TYPES = "/META-INF/mime.types";
     
-    @ObjectClassDefinition(name = "Apache Sling MIME Type Service",
-            description = "The Sling MIME Type Service provides support for " +
+    @ObjectClassDefinition(name = "Apache Sling Commons MIME Type Service",
+            description = "The Sling Commons MIME Type Service provides support for " +
                 "maintaining and configuring MIME Type mappings.")
     public @interface Config {
 
@@ -79,7 +79,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
-    private Map<String, String> mimeTab = new HashMap<>();
+    private Map<String, String> mimeMap = new HashMap<>();
 
     private Map<String, String> extensionMap = new HashMap<>();
 
@@ -98,7 +98,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         String ext = name.substring(name.lastIndexOf('.') + 1);
         ext = ext.toLowerCase();
 
-        String type = this.mimeTab.get(ext);
+        String type = this.mimeMap.get(ext);
         if (type == null) {
             MimeTypeProvider[] mtp = this.getMimeTypeProviders();
             for (int i = 0; type == null && i < mtp.length; i++) {
@@ -143,13 +143,13 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             if (extension != null && extension.length() > 0) {
                 extension = extension.toLowerCase();
 
-                String oldMimeType = mimeTab.get(extension);
+                String oldMimeType = mimeMap.get(extension);
                 if (oldMimeType == null) {
 
                     log.debug("registerMimeType: Add mapping "
                         + extension + "=" + mimeType);
 
-                    this.mimeTab.put(extension, mimeType);
+                    this.mimeMap.put(extension, mimeType);
 
                     if (defaultExtension == null) {
                         defaultExtension = extension;
@@ -253,11 +253,11 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     // ---------- plugin support -----------------------------------------------
 
-    Map<String, String> getMimeMap() {
-        return mimeTab;
+    public Map<String, String> getMimeMap() {
+        return mimeMap;
     }
 
-    Map<String, String> getExtensionMap() {
+    public Map<String, String> getExtensionMap() {
         return extensionMap;
     }
 

@@ -23,15 +23,16 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.sling.commons.mime.MimeTypeService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -58,7 +59,7 @@ class MimeTypeWebConsolePlugin extends HttpServlet {
     static final String CSS_REFS = RES_LOC + "/jquery.treeTable.css";
 
     @Reference
-    private MimeTypeServiceImpl mimeTypeService;
+    private MimeTypeService mimeTypeService;
 
     @Override
     protected void doGet(HttpServletRequest request,

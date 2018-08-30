@@ -24,10 +24,8 @@
  * interface for providers to extend the MIME type setup provided by the
  * {@link org.apache.sling.commons.mime.MimeTypeService}.
  *
- * @version 2.1.5
  */
-@org.osgi.annotation.versioning.Version("2.1.5")
+@Version("2.2.0")
 package org.apache.sling.commons.mime;
 
-
-
+import org.osgi.annotation.versioning.Version;

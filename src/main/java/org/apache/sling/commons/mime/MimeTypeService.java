@@ -18,6 +18,7 @@ package org.apache.sling.commons.mime;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -98,4 +99,9 @@ public interface MimeTypeService {
      * @throws IOException If an error occurs reading from the stream
      */
     void registerMimeType(InputStream mimeTabStream) throws IOException;
+
+    Map<String, String> getMimeMap();
+
+    Map<String, String> getExtensionMap();
+
 }
