@@ -45,7 +45,7 @@ import org.osgi.service.component.annotations.Reference;
                 "felix.webconsole.css=" + MimeTypeWebConsolePlugin.CSS_REFS
         }
         )
-class MimeTypeWebConsolePlugin extends HttpServlet {
+public class MimeTypeWebConsolePlugin extends HttpServlet {
 
     /** Serial Version */
     private static final long serialVersionUID = -2025952303202431607L;
