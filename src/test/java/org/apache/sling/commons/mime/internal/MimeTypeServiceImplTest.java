@@ -165,13 +165,24 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertNull(this.service.getMimeType(GIF));
     }
 
-    public void testEPSMimeType() throws Exception {
+    public void testMultipleMimeTypes() throws Exception {
         loadMimeTypes(MimeTypeServiceImpl.CORE_MIME_TYPES);
         loadMimeTypes(MimeTypeServiceImpl.MIME_TYPES);
 
         for (String mm : epsMimeTypeExt.keySet()) {
             assertEquals("Extension " + mm + " (1)", epsMimeTypeExt.get(mm), this.service.getExtension(mm));
         }
+    }
+
+    public void testNegativeTests() throws Exception {
+        loadMimeTypes(MimeTypeServiceImpl.CORE_MIME_TYPES);
+        loadMimeTypes(MimeTypeServiceImpl.MIME_TYPES);
+
+        // null
+        String mm = null;
+        assertEquals("Extension " + mm + " (1)", mm, this.service.getExtension(mm));
+        mm = "";
+        assertEquals("Extension " + mm + " (1)", null, this.service.getExtension(mm));
     }
 
     private MimeTypeProvider createMimeTypeProvider(final String type, final String ext) {
