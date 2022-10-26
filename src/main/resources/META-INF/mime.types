@@ -24,3 +24,8 @@
 application/compress           z
 image/pict                     pict
 text/plain                     apt
+# https://en.wikipedia.org/wiki/Encapsulated_PostScript
+application/eps           eps
+application/x-eps           eps
+image/eps           eps
+image/x-eps           eps

@@ -18,9 +18,10 @@ package org.apache.sling.commons.mime.internal;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.sling.commons.mime.MimeTypeProvider;
-import org.apache.sling.commons.mime.internal.MimeTypeServiceImpl;
 
 import junit.framework.TestCase;
 
@@ -42,6 +43,18 @@ public class MimeTypeServiceImplTest extends TestCase {
     private static final String APT = "apt";
 
     private static final String TEXT_PLAIN = "text/plain";
+
+    private static final String EPS = "eps";
+
+    private static final Map<String, String> epsMimeTypeExt = new HashMap<>();
+
+    static {
+        epsMimeTypeExt.put("application/eps", EPS);
+        epsMimeTypeExt.put("application/x-eps", EPS);
+        epsMimeTypeExt.put("image/eps", EPS);
+        epsMimeTypeExt.put("image/x-eps", EPS);
+        epsMimeTypeExt.put("application/postscript", "ai");
+    }
 
     private MimeTypeServiceImpl service;
 
@@ -150,6 +163,15 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertEquals(UNMAPPED_GIF, this.service.getExtension(IMAGE_GIF));
 
         assertNull(this.service.getMimeType(GIF));
+    }
+
+    public void testEPSMimeType() throws Exception {
+        loadMimeTypes(MimeTypeServiceImpl.CORE_MIME_TYPES);
+        loadMimeTypes(MimeTypeServiceImpl.MIME_TYPES);
+
+        for (String mm : epsMimeTypeExt.keySet()) {
+            assertEquals("Extension " + mm + " (1)", epsMimeTypeExt.get(mm), this.service.getExtension(mm));
+        }
     }
 
     private MimeTypeProvider createMimeTypeProvider(final String type, final String ext) {

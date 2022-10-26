@@ -167,8 +167,13 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             }
         }
 
+        String extension = extensions[0];
         if (defaultExtension != null) {
             this.extensionMap.put(mimeType, defaultExtension);
+            // support multiple mime types to an extension
+        } else if (extensionMap.get(mimeType) == null && extension != null && extension.length() > 0) {
+            extension = extension.toLowerCase();
+            this.extensionMap.put(mimeType, extension);
         }
     }
 
