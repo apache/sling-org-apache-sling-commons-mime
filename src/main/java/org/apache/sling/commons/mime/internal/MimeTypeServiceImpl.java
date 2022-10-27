@@ -130,21 +130,25 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     @Override
     public void registerMimeType(String mimeType, String... extensions) {
-        if (mimeType == null || mimeType.length() == 0 || extensions == null || extensions.length == 0) {
+        if (mimeType == null || mimeType.length() == 0 || extensions == null
+            || extensions.length == 0) {
             return;
         }
 
         mimeType = mimeType.toLowerCase();
+
         String defaultExtension = extensionMap.get(mimeType);
 
         for (String extension : extensions) {
-
             if (extension != null && extension.length() > 0) {
                 extension = extension.toLowerCase();
-                String oldMimeType = mimeMap.get(extension);
 
+                String oldMimeType = mimeMap.get(extension);
                 if (oldMimeType == null) {
-                    log.debug("registerMimeType: Add mapping " + extension + "=" + mimeType);
+
+                    log.debug("registerMimeType: Add mapping "
+                        + extension + "=" + mimeType);
+
                     this.mimeMap.put(extension, mimeType);
 
                     if (defaultExtension == null) {
@@ -152,15 +156,20 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                     }
 
                 } else {
-                    log.info("registerMimeType: Ignoring mapping " + extension + "=" + mimeType + ": Mapping "
-                        + extension + "=" + oldMimeType + " already exists");
+
+                    log.info(
+                        "registerMimeType: Ignoring mapping " + extension + "="
+                            + mimeType + ": Mapping " + extension + "="
+                            + oldMimeType + " already exists");
+
                 }
+
             }
         }
-        addToExtensionMap(defaultExtension, mimeType, extensions);
+        addToExtensions(defaultExtension, mimeType, extensions);
     }
 
-    private void addToExtensionMap(String defaultExtension, String mimeType, String[] extensions) {
+    private void addToExtensions(String defaultExtension, String mimeType, String[] extensions) {
         String extension = extensions[0];
         if (defaultExtension != null) {
             this.extensionMap.put(mimeType, defaultExtension);

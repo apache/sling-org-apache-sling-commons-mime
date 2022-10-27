@@ -180,9 +180,12 @@ public class MimeTypeServiceImplTest extends TestCase {
 
         // null
         String mm = null;
-        assertEquals("Extension " + mm + " (1)", mm, this.service.getExtension(mm));
+        assertEquals("Extension " + mm, mm, this.service.getExtension(mm));
+        this.service.registerMimeType("application/invalid-1", mm);
         mm = "";
-        assertEquals("Extension " + mm + " (1)", null, this.service.getExtension(mm));
+        assertEquals("Extension " + mm, null, this.service.getExtension(mm));
+        this.service.registerMimeType("application/invalid-1", mm);
+        this.service.registerMimeType("application/invalid-1", "dummy");
     }
 
     private MimeTypeProvider createMimeTypeProvider(final String type, final String ext) {
