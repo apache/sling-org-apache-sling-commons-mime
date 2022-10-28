@@ -134,9 +134,8 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             return;
         }
 
-        mimeType = mimeType.toLowerCase();
-
-        String defaultExtension = extensionMap.get(mimeType);
+        String mimeType2 = mimeType.toLowerCase();
+        String defaultExtension = extensionMap.get(mimeType2);
         String firstExtension = null;
 
         for (String extension : extensions) {
@@ -148,20 +147,14 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 firstExtension = extension;
             }
 
-            String oldMimeType = mimeMap.get(extension);
-            if (oldMimeType == null) {
-
-                log.debug("registerMimeType: Add mapping "
-                    + extension + "=" + mimeType);
-
-                this.mimeMap.put(extension, mimeType);
-
+            if (mimeMap.computeIfAbsent(extension, k -> mimeType2) != null) {
+                log.debug("registerMimeType: Add mapping {}={}", extension, mimeType2);
                 if (defaultExtension == null) {
                     defaultExtension = extension;
                 }
             }
         }
-        addToExtensions(defaultExtension, mimeType, firstExtension);
+        addToExtensions(defaultExtension, mimeType2, firstExtension);
     }
 
     private boolean isNullOrEmpty(String value) {
