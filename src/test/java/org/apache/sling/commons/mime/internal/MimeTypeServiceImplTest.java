@@ -163,7 +163,7 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertEquals(EPS, this.service.getExtension("image/eps"));
     }
 
-    public void testNegativeTests() throws Exception {
+    public void testNegativeArgs() throws Exception {
         // invalid values
         String extension = null;
         String mimeType = "application/invalid-1";
