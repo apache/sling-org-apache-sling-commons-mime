@@ -138,10 +138,14 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         mimeType = mimeType.toLowerCase();
 
         String defaultExtension = extensionMap.get(mimeType);
+        String firstExtension = null;
 
         for (String extension : extensions) {
             if (extension != null && extension.length() > 0) {
                 extension = extension.toLowerCase();
+                if(firstExtension == null) {
+                    firstExtension = extension;
+                }
 
                 String oldMimeType = mimeMap.get(extension);
                 if (oldMimeType == null) {
@@ -166,17 +170,15 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
             }
         }
-        addToExtensions(defaultExtension, mimeType, extensions);
+        addToExtensions(defaultExtension, mimeType, firstExtension);
     }
 
-    private void addToExtensions(String defaultExtension, String mimeType, String[] extensions) {
-        String extension = extensions[0];
+    private void addToExtensions(String defaultExtension, String mimeType, String extension) {
         if (defaultExtension != null) {
             this.extensionMap.put(mimeType, defaultExtension);
+        } else {
             // support multiple mime types to an extension
-        } else if (extensionMap.get(mimeType) == null && extension != null && extension.length() > 0) {
-            extension = extension.toLowerCase();
-            this.extensionMap.put(mimeType, extension);
+            this.extensionMap.putIfAbsent(mimeType, extension);
         }
     }
 
