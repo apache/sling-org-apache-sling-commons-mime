@@ -140,33 +140,25 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         String firstExtension = null;
 
         for (String extension : extensions) {
-            if (!isNullOrEmpty(extension)) {
-                extension = extension.toLowerCase();
-                if(firstExtension == null) {
-                    firstExtension = extension;
+            if (isNullOrEmpty(extension)) {
+                continue;
+            }
+            extension = extension.toLowerCase();
+            if(firstExtension == null) {
+                firstExtension = extension;
+            }
+
+            String oldMimeType = mimeMap.get(extension);
+            if (oldMimeType == null) {
+
+                log.debug("registerMimeType: Add mapping "
+                    + extension + "=" + mimeType);
+
+                this.mimeMap.put(extension, mimeType);
+
+                if (defaultExtension == null) {
+                    defaultExtension = extension;
                 }
-
-                String oldMimeType = mimeMap.get(extension);
-                if (oldMimeType == null) {
-
-                    log.debug("registerMimeType: Add mapping "
-                        + extension + "=" + mimeType);
-
-                    this.mimeMap.put(extension, mimeType);
-
-                    if (defaultExtension == null) {
-                        defaultExtension = extension;
-                    }
-
-                } else {
-
-                    log.info(
-                        "registerMimeType: Ignoring mapping " + extension + "="
-                            + mimeType + ": Mapping " + extension + "="
-                            + oldMimeType + " already exists");
-
-                }
-
             }
         }
         addToExtensions(defaultExtension, mimeType, firstExtension);
