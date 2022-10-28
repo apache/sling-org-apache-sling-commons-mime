@@ -130,8 +130,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     @Override
     public void registerMimeType(String mimeType, String... extensions) {
-        if (mimeType == null || mimeType.length() == 0 || extensions == null
-            || extensions.length == 0) {
+        if (isNullOrEmpty(mimeType) || extensions == null || extensions.length == 0) {
             return;
         }
 
@@ -141,7 +140,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         String firstExtension = null;
 
         for (String extension : extensions) {
-            if (extension != null && extension.length() > 0) {
+            if (!isNullOrEmpty(extension)) {
                 extension = extension.toLowerCase();
                 if(firstExtension == null) {
                     firstExtension = extension;
@@ -171,6 +170,10 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             }
         }
         addToExtensions(defaultExtension, mimeType, firstExtension);
+    }
+
+    private boolean isNullOrEmpty(String value) {
+        return (value == null || value.length() == 0);
     }
 
     private void addToExtensions(String defaultExtension, String mimeType, String extension) {
