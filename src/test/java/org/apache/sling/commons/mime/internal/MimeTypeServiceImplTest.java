@@ -20,12 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.sling.commons.mime.MimeTypeProvider;
-import org.apache.sling.commons.mime.internal.MimeTypeServiceImpl;
 
 import junit.framework.TestCase;
 
 /**
- * The <code>MimeTypeServiceImplTest</code> TODO
+ * The <code>MimeTypeServiceImplTest</code>
  */
 public class MimeTypeServiceImplTest extends TestCase {
 

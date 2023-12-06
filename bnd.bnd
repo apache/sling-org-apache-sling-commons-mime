@@ -6,6 +6,8 @@ Import-Package:\
   org.apache.tika.*;resolution:=optional,\
   *
 
+Bundle-Activator: org.apache.sling.commons.mime.internal.MimeBundleActivator
+
 -removeheaders:\
   Include-Resource,\
   Private-Package
