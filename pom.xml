@@ -41,7 +41,7 @@
     </scm>
 
     <properties>
-        <sling.java.version>11</sling.java.version>
+        <sling.java.version>17</sling.java.version>
     </properties>
     <dependencies>
         <!-- OSGi -->
