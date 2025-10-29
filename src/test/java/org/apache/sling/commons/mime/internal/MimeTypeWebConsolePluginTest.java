@@ -37,27 +37,16 @@ import static org.mockito.Mockito.when;
  */
 public class MimeTypeWebConsolePluginTest {
 
-    private void loadMimeTypes(MimeTypeServiceImpl service, String path) throws IOException {
-        InputStream ins = this.getClass().getResourceAsStream(path);
-        assertNotNull(ins);
-
-        try {
-            service.registerMimeType(ins);
-        } finally {
-            try {
-                ins.close();
-            } catch (IOException ignore) {
-            }
-        }
-    }
-
     /**
      * Test method for {@link org.apache.sling.commons.mime.internal.MimeTypeWebConsolePlugin#doGet(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)}.
      */
     @Test
     public void testDoGet() throws IOException {
         final MimeTypeServiceImpl service = new MimeTypeServiceImpl();
-        loadMimeTypes(service, MimeTypeServiceImpl.CORE_MIME_TYPES);
+        try (InputStream ins = this.getClass().getResourceAsStream(MimeTypeServiceImpl.CORE_MIME_TYPES)) {
+            assertNotNull(ins);
+            service.registerMimeType(ins);
+        }
 
         final MimeTypeWebConsolePlugin plugin = new MimeTypeWebConsolePlugin(service);
         assertNotNull(plugin);
