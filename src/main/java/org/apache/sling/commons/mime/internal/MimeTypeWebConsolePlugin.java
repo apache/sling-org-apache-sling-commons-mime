@@ -18,11 +18,6 @@
  */
 package org.apache.sling.commons.mime.internal;
 
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -32,7 +27,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
+import jakarta.servlet.Servlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.sling.commons.mime.MimeTypeService;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -57,13 +57,18 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
 
     static final String CSS_REFS = RES_LOC + "/jquery.treeTable.css";
 
-    @Reference
-    private MimeTypeService mimeTypeService;
+    private final transient MimeTypeService mimeTypeService;
+
+    // SCR will inject the service via the constructor
+    @Activate
+    public MimeTypeWebConsolePlugin(@Reference MimeTypeService mimeTypeService) {
+        this.mimeTypeService = mimeTypeService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Map<String, Set<String>> mimetab = new TreeMap<String, Set<String>>();
+        Map<String, Set<String>> mimetab = new TreeMap<>();
 
         Map<String, String> extMap = mimeTypeService.getExtensionMap();
 
@@ -74,7 +79,7 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
 
             Set<String> extList = mimetab.get(mime);
             if (extList == null) {
-                extList = new HashSet<String>();
+                extList = new HashSet<>();
                 mimetab.put(mime, extList);
             }
 
