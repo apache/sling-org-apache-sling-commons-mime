@@ -31,15 +31,13 @@ public class MimeBundleActivator implements BundleActivator {
     @Override
     public void start(final BundleContext context) throws Exception {
         try {
-            context.registerService(MimeTypeProvider.class, 
-                new TikaMimeTypeProvider() {}, 
-                null);
+            context.registerService(MimeTypeProvider.class, new TikaMimeTypeProvider() {}, null);
             logger.info("Apache Tika detected, using it for MIME type detection");
-        } catch ( final Throwable t ) {
+        } catch (final Throwable t) {
             // don't care
         }
     }
-    
+
     @Override
     public void stop(final BundleContext context) throws Exception {
         // nothing to do

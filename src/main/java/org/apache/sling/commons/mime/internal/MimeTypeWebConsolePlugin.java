@@ -18,6 +18,11 @@
  */
 package org.apache.sling.commons.mime.internal;
 
+import javax.servlet.Servlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -27,11 +32,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.servlet.Servlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -39,12 +39,11 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
         service = Servlet.class,
         property = {
-                "felix.webconsole.label=" + MimeTypeWebConsolePlugin.LABEL,
-                "felix.webconsole.title=" + MimeTypeWebConsolePlugin.TITLE,
-                "felix.webconsole.category=Sling",
-                "felix.webconsole.css=" + MimeTypeWebConsolePlugin.CSS_REFS
-        }
-        )
+            "felix.webconsole.label=" + MimeTypeWebConsolePlugin.LABEL,
+            "felix.webconsole.title=" + MimeTypeWebConsolePlugin.TITLE,
+            "felix.webconsole.category=Sling",
+            "felix.webconsole.css=" + MimeTypeWebConsolePlugin.CSS_REFS
+        })
 public class MimeTypeWebConsolePlugin extends HttpServlet {
 
     /** Serial Version */
@@ -62,8 +61,7 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
     private MimeTypeService mimeTypeService;
 
     @Override
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Map<String, Set<String>> mimetab = new TreeMap<String, Set<String>>();
 
@@ -91,8 +89,7 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
 
         PrintWriter pw = response.getWriter();
 
-        pw.println("<script type='text/javascript' src='" + RES_LOC
-            + "/jquery.treeTable.min.js'></script>");
+        pw.println("<script type='text/javascript' src='" + RES_LOC + "/jquery.treeTable.min.js'></script>");
         pw.println("<script type='text/javascript'>");
         pw.println("  $(document).ready(function()  {");
         pw.println("    $('#mimetabtable').treeTable({ treeColumn: 1 });");
@@ -101,8 +98,8 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
 
         pw.println("<div id='plugin_content'>");
         pw.println("<div class='fullwidth'>");
-        pw.println("<div class='statusline'>Statistic: " + mimetab.size()
-            + " MIME Types, " + numExt + " Extensions</div>");
+        pw.println("<div class='statusline'>Statistic: " + mimetab.size() + " MIME Types, " + numExt
+                + " Extensions</div>");
         pw.println("</div>");
 
         pw.println("<div class='table'>");
@@ -137,8 +134,7 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
                 pw.println("</tr>");
             }
 
-            pw.println("<tr id='" + entry.getKey().replace('/', '-')
-                + "' class='child-of-" + currentMajor + "'>");
+            pw.println("<tr id='" + entry.getKey().replace('/', '-') + "' class='child-of-" + currentMajor + "'>");
             pw.println("<td>&nbsp;</td>");
             pw.println("<td>" + entry.getKey() + "</td>");
             pw.println("<td>" + entry.getValue() + "</td>");
@@ -172,5 +168,4 @@ public class MimeTypeWebConsolePlugin extends HttpServlet {
 
         return null;
     }
-
 }

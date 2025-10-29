@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.sling</groupId>
         <artifactId>sling-bundle-parent</artifactId>
-        <version>52</version>
+        <version>62</version>
         <relativePath />
     </parent>
 
@@ -31,52 +31,18 @@
     <version>2.3.1-SNAPSHOT</version>
 
     <name>Apache Sling Commons MIME</name>
-    <description>
-	Support for configurable MIME type mapping and querying
-    </description>
+    <description>Support for configurable MIME type mapping and querying</description>
 
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-commons-mime.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/sling-org-apache-sling-commons-mime.git</developerConnection>
-        <url>https://github.com/apache/sling-org-apache-sling-commons-mime.git</url>
-      <tag>org.apache.sling.commons.mime-2.3.0</tag>
-  </scm>
+        <tag>HEAD</tag>
+        <url>https://github.com/apache/sling-org-apache-sling-commons-mime/tree/${project.scm.tag}</url>
+    </scm>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>biz.aQute.bnd</groupId>
-                <artifactId>bnd-baseline-maven-plugin</artifactId>
-            </plugin>
-           <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>src/main/resources/res/jquery.treeTable.css</exclude>
-                        <exclude>src/main/resources/res/jquery.treeTable.min.js</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <excludePackageNames>
-                        org.apache.sling.commons.mime.internal
-                    </excludePackageNames>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
+    <properties>
+        <sling.java.version>11</sling.java.version>
+    </properties>
     <dependencies>
         <!-- OSGi -->
         <dependency>
@@ -122,4 +88,38 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-baseline-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>src/main/resources/res/jquery.treeTable.css</exclude>
+                        <exclude>src/main/resources/res/jquery.treeTable.min.js</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <excludePackageNames>org.apache.sling.commons.mime.internal</excludePackageNames>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

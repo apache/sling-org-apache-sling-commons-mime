@@ -1,18 +1,20 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.apache.sling.commons.mime.internal;
 
@@ -49,36 +51,39 @@ import org.slf4j.LoggerFactory;
  * The <code>MimeTypeServiceImpl</code> is the official implementation of the
  * {@link MimeTypeService} interface.
  */
-@Component(service = MimeTypeService.class,
-    property = {
+@Component(
+        service = MimeTypeService.class,
+        property = {
             Constants.SERVICE_VENDOR + "=The Apache Software Foundation",
             Constants.SERVICE_DESCRIPTION + "=Apache Sling Commons MIME Type Service"
-    })
+        })
 @Designate(ocd = MimeTypeServiceImpl.Config.class)
 public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     public static final String CORE_MIME_TYPES = "/META-INF/core_mime.types";
 
     public static final String MIME_TYPES = "/META-INF/mime.types";
-    
-    @ObjectClassDefinition(name = "Apache Sling Commons MIME Type Service",
-            description = "The Sling Commons MIME Type Service provides support for " +
-                "maintaining and configuring MIME Type mappings.")
+
+    @ObjectClassDefinition(
+            name = "Apache Sling Commons MIME Type Service",
+            description = "The Sling Commons MIME Type Service provides support for "
+                    + "maintaining and configuring MIME Type mappings.")
     public @interface Config {
 
-        @AttributeDefinition(name = "MIME Types",
-                description = "Configures additional MIME type mappings in the "+
-                 "traditional mime.types file format: Each property is a blank space separated "+
-                 "list of strings where the first string is the MIME type and the rest of the "+
-                 "strings are filename extensions referring to the MIME type. Using this "+
-                 "property additional MIME type mappings may be defined. Existing MIME type "+
-                 "mappings cannot be redefined and setting such mappings in this property "+
-                 "has no effect. For a list of existing mappings refer to the MIME Types page.")
+        @AttributeDefinition(
+                name = "MIME Types",
+                description = "Configures additional MIME type mappings in the "
+                        + "traditional mime.types file format: Each property is a blank space separated "
+                        + "list of strings where the first string is the MIME type and the rest of the "
+                        + "strings are filename extensions referring to the MIME type. Using this "
+                        + "property additional MIME type mappings may be defined. Existing MIME type "
+                        + "mappings cannot be redefined and setting such mappings in this property "
+                        + "has no effect. For a list of existing mappings refer to the MIME Types page.")
         String[] mime_types();
     }
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    
+
     private Map<String, String> mimeMap = new HashMap<>();
 
     private Map<String, String> extensionMap = new HashMap<>();
@@ -130,8 +135,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     @Override
     public void registerMimeType(String mimeType, String... extensions) {
-        if (mimeType == null || mimeType.length() == 0 || extensions == null
-            || extensions.length == 0) {
+        if (mimeType == null || mimeType.length() == 0 || extensions == null || extensions.length == 0) {
             return;
         }
 
@@ -146,8 +150,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 String oldMimeType = mimeMap.get(extension);
                 if (oldMimeType == null) {
 
-                    log.debug("registerMimeType: Add mapping "
-                        + extension + "=" + mimeType);
+                    log.debug("registerMimeType: Add mapping " + extension + "=" + mimeType);
 
                     this.mimeMap.put(extension, mimeType);
 
@@ -157,13 +160,10 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
                 } else {
 
-                    log.info(
-                        "registerMimeType: Ignoring mapping " + extension + "="
+                    log.info("registerMimeType: Ignoring mapping " + extension + "="
                             + mimeType + ": Mapping " + extension + "="
                             + oldMimeType + " already exists");
-
                 }
-
             }
         }
 
@@ -174,8 +174,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
 
     @Override
     public void registerMimeType(InputStream mimeTabStream) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-            mimeTabStream, "ISO-8859-1"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(mimeTabStream, "ISO-8859-1"));
 
         String line;
         while ((line = br.readLine()) != null) {
@@ -203,9 +202,8 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
         // register maps of existing bundles
         Bundle[] bundles = context.getBundles();
         for (int i = 0; i < bundles.length; i++) {
-            if ((bundles[i].getState() & (Bundle.RESOLVED | Bundle.STARTING
-                | Bundle.ACTIVE | Bundle.STOPPING)) != 0
-                && bundles[i].getBundleId() != bundle.getBundleId()) {
+            if ((bundles[i].getState() & (Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0
+                    && bundles[i].getBundleId() != bundle.getBundleId()) {
                 this.registerMimeType(bundles[i].getEntry(MIME_TYPES));
             }
         }
@@ -284,8 +282,7 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
                 this.registerMimeType(ins);
             } catch (IOException ioe) {
                 // log but don't actually care
-                log.warn("An error occurred reading "
-                    + mimetypes, ioe);
+                log.warn("An error occurred reading " + mimetypes, ioe);
             } finally {
                 if (ins != null) {
                     try {
@@ -313,5 +310,4 @@ public class MimeTypeServiceImpl implements MimeTypeService, BundleListener {
             this.registerMimeType(parts[0], extensions);
         }
     }
-
 }
