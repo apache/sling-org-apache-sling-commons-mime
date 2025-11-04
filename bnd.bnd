@@ -1,7 +1,7 @@
 Bundle-DocURL: https://sling.apache.org/site/mime-type-support.html
 
 Import-Package:\
-  javax.servlet.*;resolution:=optional,\
+  jakarta.servlet.*;resolution:=optional,\
   org.apache.felix.webconsole;resolution:=optional,\
   org.apache.tika.*;resolution:=optional,\
   *
