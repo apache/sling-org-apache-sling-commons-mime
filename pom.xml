@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>1.28.3</version>
+            <version>3.2.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
