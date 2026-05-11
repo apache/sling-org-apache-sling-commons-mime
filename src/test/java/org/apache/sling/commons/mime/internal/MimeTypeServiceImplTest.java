@@ -21,13 +21,19 @@ package org.apache.sling.commons.mime.internal;
 import java.io.IOException;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
 import org.apache.sling.commons.mime.MimeTypeProvider;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * The <code>MimeTypeServiceImplTest</code>
  */
-public class MimeTypeServiceImplTest extends TestCase {
+class MimeTypeServiceImplTest {
 
     private static final String IMAGE_GIF = "image/gif";
 
@@ -45,34 +51,31 @@ public class MimeTypeServiceImplTest extends TestCase {
 
     private MimeTypeServiceImpl service;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @BeforeEach
+    void setUp() {
         this.service = new MimeTypeServiceImpl();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() {
         this.service = null;
-
-        super.tearDown();
     }
 
-    public void testNoMapping() throws Exception {
+    @Test
+    void testNoMapping() {
         assertNull(this.service.getMimeType("file." + TXT));
         assertNull(this.service.getMimeType(TXT));
         assertNull(this.service.getExtension(TEXT_PLAIN));
     }
 
-    public void testTxtMapping() throws Exception {
-
+    @Test
+    void testTxtMapping() {
         this.service.registerMimeType(TEXT_PLAIN, TXT, LOG, APT);
 
         final String[] exts = {TXT, LOG, APT};
         for (String ext : exts) {
-            assertEquals("Extension " + ext + " (1)", TEXT_PLAIN, this.service.getMimeType("file." + ext));
-            assertEquals("Extension " + ext + " (2)", TEXT_PLAIN, this.service.getMimeType(ext));
+            assertEquals(TEXT_PLAIN, this.service.getMimeType("file." + ext), "Extension " + ext + " (1)");
+            assertEquals(TEXT_PLAIN, this.service.getMimeType(ext), "Extension " + ext + " (2)");
         }
 
         assertEquals(TEXT_PLAIN, this.service.getMimeType(("file." + TXT).toUpperCase()));
@@ -85,14 +88,15 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertEquals(TXT, this.service.getExtension(TEXT_PLAIN));
     }
 
-    public void testFileLoading() throws Exception {
+    @Test
+    void testFileLoading() throws Exception {
         loadMimeTypes(MimeTypeServiceImpl.CORE_MIME_TYPES);
         loadMimeTypes(MimeTypeServiceImpl.MIME_TYPES);
 
         final String[] exts = {TXT, LOG, APT};
         for (String ext : exts) {
-            assertEquals("Extension " + ext + " (1)", TEXT_PLAIN, this.service.getMimeType("file." + ext));
-            assertEquals("Extension " + ext + " (2)", TEXT_PLAIN, this.service.getMimeType(ext));
+            assertEquals(TEXT_PLAIN, this.service.getMimeType("file." + ext), "Extension " + ext + " (1)");
+            assertEquals(TEXT_PLAIN, this.service.getMimeType(ext), "Extension " + ext + " (2)");
         }
 
         assertEquals(TEXT_PLAIN, this.service.getMimeType(("file." + TXT).toUpperCase()));
@@ -106,7 +110,8 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertEquals(TXT, this.service.getExtension(TEXT_PLAIN));
     }
 
-    public void testProvider() throws Exception {
+    @Test
+    void testProvider() {
         MimeTypeProvider mtp = this.createMimeTypeProvider(IMAGE_GIF, GIF);
 
         assertNull(this.service.getMimeType(GIF));
@@ -123,7 +128,8 @@ public class MimeTypeServiceImplTest extends TestCase {
         assertNull(this.service.getExtension(IMAGE_GIF));
     }
 
-    public void testProvider2() throws Exception {
+    @Test
+    void testProvider2() {
         MimeTypeProvider mtp = this.createMimeTypeProvider(IMAGE_GIF, GIF);
 
         this.service.registerMimeType(IMAGE_GIF, UNMAPPED_GIF);
@@ -173,16 +179,9 @@ public class MimeTypeServiceImplTest extends TestCase {
     }
 
     private void loadMimeTypes(String path) throws IOException {
-        InputStream ins = this.getClass().getResourceAsStream(path);
-        assertNotNull(ins);
-
-        try {
+        try (InputStream ins = this.getClass().getResourceAsStream(path)) {
+            assertNotNull(ins);
             this.service.registerMimeType(ins);
-        } finally {
-            try {
-                ins.close();
-            } catch (IOException ignore) {
-            }
         }
     }
 }

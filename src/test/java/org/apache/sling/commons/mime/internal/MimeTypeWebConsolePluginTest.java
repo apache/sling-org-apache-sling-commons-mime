@@ -25,23 +25,23 @@ import java.io.StringWriter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  *
  */
-public class MimeTypeWebConsolePluginTest {
+class MimeTypeWebConsolePluginTest {
 
     /**
      * Test method for {@link org.apache.sling.commons.mime.internal.MimeTypeWebConsolePlugin#doGet(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)}.
      */
     @Test
-    public void testDoGet() throws IOException {
+    void testDoGet() throws IOException {
         final MimeTypeServiceImpl service = new MimeTypeServiceImpl();
         try (InputStream ins = this.getClass().getResourceAsStream(MimeTypeServiceImpl.CORE_MIME_TYPES)) {
             assertNotNull(ins);
@@ -61,6 +61,6 @@ public class MimeTypeWebConsolePluginTest {
         String output = sw.toString();
 
         // Assert: basic expected content is present
-        assertTrue("Output should contain a table element", output.contains("<table id='mimetabtable'"));
+        assertTrue(output.contains("<table id='mimetabtable'"), "Output should contain a table element");
     }
 }

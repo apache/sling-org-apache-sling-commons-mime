@@ -18,22 +18,26 @@
  */
 package org.apache.sling.commons.mime.internal;
 
-import junit.framework.TestCase;
 import org.apache.sling.commons.mime.MimeTypeProvider;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for the {@link TikaMimeTypeProvider} class.
  */
-public class TikaMimeTypeProviderTest extends TestCase {
+class TikaMimeTypeProviderTest {
 
-    public void testGetMimeType() {
+    @Test
+    void testGetMimeType() {
         MimeTypeProvider provider = new TikaMimeTypeProvider();
         assertEquals("text/plain", provider.getMimeType("test.txt"));
         assertEquals("application/pdf", provider.getMimeType("test.pdf"));
         assertEquals("image/jpeg", provider.getMimeType("test.jpg"));
     }
 
-    public void testGetExtension() {
+    @Test
+    void testGetExtension() {
         MimeTypeProvider provider = new TikaMimeTypeProvider();
         assertEquals("txt", provider.getExtension("text/plain"));
         assertEquals("pdf", provider.getExtension("application/pdf"));
